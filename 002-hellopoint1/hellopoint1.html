@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Draw a point (1)</title>
+</head>
+
+<body onload="main()">
+    <canvas id="webgl" width="400" height="400">
+        Please use the browert supporting "canvas"
+    </canvas>
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+    <script>
+
+
+        /** 
+         * 顶点着色器程序
+         * @see https://www.khronos.org/registry/OpenGL/specs/es/2.0/GLSL_ES_Specification_1.00.pdf
+        */
+        var VSHADER_SOURCE =
+            'void main() {\n' +
+            ' gl_Position = vec4(0.5, 0.5, 0.0, 1.0);\n' + //设置坐标信息
+            ' gl_PointSize = 10.0;\n' + //设置尺寸
+            '}\n';
+
+        /** 
+         * 片元着色器
+        */
+        var FSHADER_SOURCE =
+            'void main() {\n' +
+            ' gl_FragColor = vec4(1.0,0.0,1.0,1.0);\n' + //设置颜色值
+            ' }\n';
+
+        function main() {
+            //canvas
+            var canvas = document.getElementById('webgl');
+
+            //webgl context
+            var gl = getWebGLContext(canvas);
+
+            if (!gl) {
+                console.log('failed to get the rendering context for webgl!');
+                return;
+            }
+
+            //初始化着色器
+            if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
+                console.log('failed to initialize shaders!');
+                return;
+            }
+
+            //color
+            gl.clearColor(0.0, 0.0, 1.0, 1.0);
+
+            //clear
+            gl.clear(gl.COLOR_BUFFER_BIT);
+
+            //draw
+            gl.drawArrays(gl.POINTS, 0, 1);
+
+        }
+    </script>
+
+</body>
+
+</html>
